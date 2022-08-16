@@ -57,7 +57,6 @@ class FlutterScreenRecordingPlugin(
             registrar.addActivityResultListener(plugin)
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -65,8 +64,12 @@ class FlutterScreenRecordingPlugin(
 
                 val handler = Handler(Looper.getMainLooper())
                 handler.postDelayed({
+                    mMediaProjectionCallback = MediaProjectionCallback()
+                    mMediaProjection = mProjectionManager?.getMediaProjection(resultCode, data!!)
+                    mMediaProjection?.registerCallback(mMediaProjectionCallback, null)
+                    mVirtualDisplay = createVirtualDisplay()
+                    mMediaRecorder?.prepare()
                     try {
-                        //mMediaRecorder?.prepare()
                         mMediaRecorder?.start()
                     } catch (e: IOException) {
                         println("ERR");
@@ -74,11 +77,6 @@ class FlutterScreenRecordingPlugin(
                         println("Error startRecordScreen")
                         println(e.message)
                     }
-
-                    mMediaProjectionCallback = MediaProjectionCallback()
-                    mMediaProjection = mProjectionManager?.getMediaProjection(resultCode, data!!)
-                    mMediaProjection?.registerCallback(mMediaProjectionCallback, null)
-                    mVirtualDisplay = createVirtualDisplay()
                 }, mDelay.toLong())
                 _result.success(true)
                 return true
