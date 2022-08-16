@@ -39,7 +39,7 @@ class FlutterScreenRecordingPlugin(
     var mVirtualDisplay: VirtualDisplay? = null
     var mDisplayWidth: Int = 1280
     var mDisplayHeight: Int = 720
-    var mDelay: Long = 300
+    var mDelay: Double = 300.0
     var storePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + File.separator
     var videoName: String? = ""
     var recordAudio: Boolean? = false;
@@ -79,7 +79,7 @@ class FlutterScreenRecordingPlugin(
                     mMediaProjection = mProjectionManager?.getMediaProjection(resultCode, data!!)
                     mMediaProjection?.registerCallback(mMediaProjectionCallback, null)
                     mVirtualDisplay = createVirtualDisplay()
-                }, mDelay)
+                }, mDelay.toLong())
                 _result.success(true)
                 return true
             } else {
@@ -102,7 +102,7 @@ class FlutterScreenRecordingPlugin(
                 recordAudio = call.argument<Boolean?>("audio")
                 val width = call.argument<Int?>("width");
                 val height = call.argument<Int?>("height");
-                val delay = call.argument<Long?>("delayDuration");
+                val delay = call.argument<Double?>("delayDuration");
                 delay?.let{
                     mDelay = delay;
                 }
