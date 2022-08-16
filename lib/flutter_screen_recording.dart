@@ -35,7 +35,7 @@ class FlutterScreenRecording {
       "audioMic": false,
       "audioApp": true,
       "audio": true, // for android
-      "delayDuration": 0,
+      "delayDuration": 0.0,
     });
     return start;
   }
