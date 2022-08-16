@@ -129,6 +129,8 @@ public class SwiftFlutterScreenRecordingPlugin: NSObject, FlutterPlugin {
                     self.myResult!(false)
                     return;
                 }
+
+                self.myResult!(true)
                 
                 guard let timer = self.timer else {
                     DispatchQueue.main.async { 
@@ -155,7 +157,6 @@ public class SwiftFlutterScreenRecordingPlugin: NSObject, FlutterPlugin {
                 case RPSampleBufferType.video:
                     print("Writing video...");
                     if self.videoWriter?.status == AVAssetWriter.Status.unknown {
-                        self.myResult!(true)
                         self.videoWriter?.startWriting()
                         self.videoWriter?.startSession(atSourceTime:  CMSampleBufferGetPresentationTimeStamp(cmSampleBuffer))
                     } else if self.videoWriter?.status == AVAssetWriter.Status.writing {
@@ -163,7 +164,6 @@ public class SwiftFlutterScreenRecordingPlugin: NSObject, FlutterPlugin {
                             print("Append sample...");
                             if  self.videoWriterInput?.append(cmSampleBuffer) == false {
                                 print("Problems writing video")
-                                self.myResult!(false)
                             }
                         }
                     }
